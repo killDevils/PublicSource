@@ -1,6 +1,6 @@
 chooseProject(){
 	projectsList=$(cat $gcstkCache/projectsList)
-	export PS3=$(cecho $blue "Which project?")
+	export PS3=$(cecho $blue "Which project:")
 	select i in $projectsList
 	do
 		case $i in
@@ -8,6 +8,8 @@ chooseProject(){
 		esac
 		break
 	done
+	cecho $whiteRed "The Project you chose is \"$projectName\""
+	divider
 }
 
 chooseIns(){
