@@ -1,3 +1,5 @@
+# source <(curl -s https://raw.githubusercontent.com/killDevils/PublicSource/master/gcloudKit.sh)
+
 
 
 listProjects(){
