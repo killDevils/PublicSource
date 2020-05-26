@@ -1,7 +1,6 @@
 # source <(curl -s https://raw.githubusercontent.com/killDevils/PublicSource/master/gcloudKit.sh)
 
 
-
 listProjects(){
 	local themeColor="yellow"
 	cecho $themeColor "Here are the projects:"
@@ -24,7 +23,7 @@ chooseProject(){
 	divider
 }
 
-listIns(){
+listInstances(){
 	local themeColor="yellow"
 	if [ -z $projectName ]; then
     chooseProject
@@ -34,21 +33,21 @@ listIns(){
 	divider
 }
 
-chooseIns(){
+chooseInstance(){
 	local themeColor="yellow"
   if [ -z $projectName ]; then
     chooseProject
   fi
-  insList=$(cat $gcstkCache/$projectName/insList | awk '!/NAME/ && /RUNNING/ { print $1 }' | sort -k1)
+  instanceList=$(cat $gcstkCache/$projectName/insList | awk '!/NAME/ && /RUNNING/ { print $1 }' | sort -k1)
   export PS3=$(cecho $themeColor "Which instance:")
-  select i in $insList
+  select i in $instanceList
   do
     case $i in
-      *) insName=$i
+      *) instanceName=$i
     esac
     break
   done
-	cecho $themeColor "The Project you chose is \"$insName\""
+	cecho $themeColor "The Project you chose is \"$instanceName\""
 	divider
 }
 
