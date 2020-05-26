@@ -1,8 +1,11 @@
-# source <(curl -s https://0a5933b2527c13c58af319558c8fab295682a3a1@raw.githubusercontent.com/killDevils/PublicSource/master/gcloudKit.sh)
 
 
-
-
+listProjects(){
+	local themeColor="yellow"
+	cecho $themeColor "Here are the projects:"
+	cat $gcstkCache/projectsList
+	divider
+}
 
 chooseProject(){
 	local themeColor="yellow"
@@ -19,19 +22,23 @@ chooseProject(){
 	divider
 }
 
-listInstances(){
+listIns(){
 	local themeColor="yellow"
-	cecho $themeColor ""
+	if [ -z $projectName ]; then
+    chooseProject
+  fi
+	cecho $themeColor "Here are the instances:"
 	cat $gcstkCache/$projectName/insList | awk '!/NAME/ && /RUNNING/ { print $1 }' | sort -k1
+	divider
 }
 
-
 chooseIns(){
+	local themeColor="yellow"
   if [ -z $projectName ]; then
     chooseProject
   fi
   insList=$(cat $gcstkCache/$projectName/insList | awk '!/NAME/ && /RUNNING/ { print $1 }' | sort -k1)
-  export PS3=$(cecho $purple "Which instance?")
+  export PS3=$(cecho $themeColor "Which instance:")
   select i in $insList
   do
     case $i in
@@ -39,11 +46,21 @@ chooseIns(){
     esac
     break
   done
+	cecho $themeColor "The Project you chose is \"$insName\""
+	divider
+}
+
+listRegions(){
+	local themeColor="yellow"
+	cecho $themeColor "Here are the regions:"
+	cat $gcstkCache/regionsList | awk '!/NAME/ { print $1 }'
+	divider
 }
 
 chooseRegion(){
+	local themeColor="yellow"
   regionsList=$(cat $gcstkCache/regionsList | awk '!/NAME/ { print $1 }')
-  export PS3=$(cecho $yellow "Which region?")
+  export PS3=$(cecho $themeColor "Which region:")
   select i in $regionsList
   do
   	case $i in
@@ -51,16 +68,27 @@ chooseRegion(){
   	esac
   	break
   done
-	cecho $yellow "The Region you chose is \"$regionName\""
+	cecho $themeColor "The Region you chose is \"$regionName\""
+	divider
+}
+
+listZones(){
+	local themeColor="yellow"
+	if [ -z $regionCode ]; then
+    chooseRegion
+  fi
+	cecho $themeColor "Here are the zones:"
+	cat $gcstkCache/regionsList | grep $regionCode | awk '{ print $1 }'
 	divider
 }
 
 chooseZone(){
+	local themeColor="yellow"
   if [ -z $regionCode ]; then
     chooseRegion
   fi
   zonesList=$(cat $gcstkCache/regionsList | grep $regionCode | awk '{ print $1 }')
-  export PS3=$(cecho $cyan "Which zone?")
+  export PS3=$(cecho $themeColor "Which zone:")
   select i in $zonesList
   do
   	case $i in
@@ -68,6 +96,8 @@ chooseZone(){
   	esac
   	break
   done
+	cecho $themeColor "The Zone you chose is \"$zoneName\""
+	divider
 }
 
 judgeHttpAndHttps(){
