@@ -1,6 +1,13 @@
+# source <(curl -s https://0a5933b2527c13c58af319558c8fab295682a3a1@raw.githubusercontent.com/killDevils/PublicSource/master/gcloudKit.sh)
+
+
+
+
+
 chooseProject(){
+	local themeColor="yellow"
 	projectsList=$(cat $gcstkCache/projectsList)
-	export PS3=$(cecho $blue "Which project:")
+	export PS3=$(cecho $themeColor "Which project:")
 	select i in $projectsList
 	do
 		case $i in
@@ -8,9 +15,16 @@ chooseProject(){
 		esac
 		break
 	done
-	cecho $whiteRed "The Project you chose is \"$projectName\""
+	cecho $themeColor "The Project you chose is \"$projectName\""
 	divider
 }
+
+listInstances(){
+	local themeColor="yellow"
+	cecho $themeColor ""
+	cat $gcstkCache/$projectName/insList | awk '!/NAME/ && /RUNNING/ { print $1 }' | sort -k1
+}
+
 
 chooseIns(){
   if [ -z $projectName ]; then
@@ -33,10 +47,12 @@ chooseRegion(){
   select i in $regionsList
   do
   	case $i in
-  		*) regionCode=$i
+  		*) regionName=$i
   	esac
   	break
   done
+	cecho $yellow "The Region you chose is \"$regionName\""
+	divider
 }
 
 chooseZone(){
