@@ -12,6 +12,22 @@ docker rmi $(docker images -a -q)
 # totally clean docker
 docker rm -vf $(docker ps -a -q) && docker rmi $(docker images -a -q)
 
+# normally stop and rm all containers
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+
+# use mattrayner/lamp
+docker run -i -t -p "80:80" -v ${PWD}/Documents/GitHub/bHTMLx:/app:ro -v ${PWD}/Documents/GitHub/bHTMLx/mysql:/var/lib/mysql mattrayner/lamp:latest-1804
+
+
+
+
+
+
+
+
+
+
 # <Docker in Action> Chapter2 P32
 
 
