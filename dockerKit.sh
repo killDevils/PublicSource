@@ -8,6 +8,10 @@ docker rm -vf $(docker ps -a -f status=exited -f status=created -q)
 # force remove all docker images
 docker rmi $(docker images -a -q)
 
+
+# totally clean docker
+docker rm -vf $(docker ps -a -q) && docker rmi $(docker images -a -q)
+
 # <Docker in Action> Chapter2 P32
 
 
