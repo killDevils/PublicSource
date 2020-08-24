@@ -2,7 +2,7 @@
 
 
 rmc(){
-  if [ -z $1 ]; then
+  if [[ -z $1 ]]; then
     echo "Parameter missing.
     to remove all containers: rmc all
     to delete a certain one: rmc '$container_name'
@@ -11,19 +11,19 @@ rmc(){
   fi
   running_containers=$(docker container ls -q)
   all_containers=$(docker container ls -aq)
-  if [ $1 == "all" ]; then
-    if [ -z "$all_containers" ]; then
+  if [[ $1 == "all" ]]; then
+    if [[ -z "$all_containers" ]]; then
       echo "No container exists."
       return 0
     fi
-    if [ -n "$running_containers" ]; then
+    if [[ -n "$running_containers" ]]; then
       echo "Shutting down all running containers..."
       docker stop $running_containers
       echo "All containers stopped."
     fi
     echo "Removing: $all_containers"
     docker rm $all_containers
-  elif [ $1 == "stopped" ]; then
+  elif [[ $1 == "stopped" ]]; then
     docker rm $(docker ps -a -q) 2> /dev/null
   else
     docker rm $1
@@ -32,7 +32,7 @@ rmc(){
 
 
 lsc(){
-  if [ -z $1 ]; then
+  if [[ -z $1 ]]; then
     echo "缺参数。
     罗列所有：“lsc all”。
     罗列运行中的：“lsc running”。
@@ -47,13 +47,13 @@ lsc(){
 }
 
 rmi(){
-  if [ -z $1 ]; then
+  if [[ -z "$1" ]]; then
     echo "缺参数。
     删除所有：“rmi all”。
     删除某一个：“rmi 镜像名”。"
     return 0
   fi
-  if [ $1 == "all" ]; then
+  if [[ "$1" == "all" ]]; then
     docker rmi -f $(docker image ls -q) 2> /dev/null
   else
     docker rmi -f $1
