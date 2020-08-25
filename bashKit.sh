@@ -108,5 +108,7 @@ YesNo(){
   if [ -z "$yesNo" ] || [ "$yesNo" == "y" ]; then
     continue
   elif [ "$yesNo" == "N" ]; then
-    
+    echo "See you!"
+    return 0
+  fi
 }
