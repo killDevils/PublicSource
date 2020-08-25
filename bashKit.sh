@@ -5,10 +5,10 @@ grey='1;38;5;248';white='1;97';red='1;31';green='1;32';yellow='1;33';blue='1;34'
 
 cecho(){
   if [[ $1 == *";"* ]]; then
-    echo -e "\e[$1m $2 \e[0m"
+    echo -e "\e[${1}m${2} \e[0m"
   else
     eval local x=\${$1}
-    echo -e "\e[${x}m $2 \e[0m"
+    echo -e "\e[${x}m${2} \e[0m"
   fi
 }
 
@@ -96,7 +96,17 @@ FourOperations(){
 }
 
 divider(){
-	echo
-	echo
-	echo
+  if [ -z "$1" ]; then x=1; else x=$1; fi
+  for i in {1..$x}; do
+    echo
+  done
+}
+
+YesNo(){
+  unset yesNo
+  cread purple 'Continue? [y/N]: ' yesNo
+  if [ -z "$yesNo" ] || [ "$yesNo" == "y" ]; then
+    continue
+  elif [ "$yesNo" == "N" ]; then
+    
 }
