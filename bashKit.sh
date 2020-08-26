@@ -29,9 +29,9 @@ cread(){
 addCron(){
   cread $green "Full path of the script: " scriptPath
   cread $blue "How do you change * * * * * : " fiveStar
-  if [ ! -x "$scriptPath" ]; then
+  if [[ ! -x "$scriptPath" ]]; then
     sudo chmod a+x $scriptPath
-  elif [ ! -f "$scriptPath" ]; then
+  elif [[ ! -f "$scriptPath" ]]; then
     echo "File does not exist!"
     return 1
   fi
@@ -96,7 +96,7 @@ FourOperations(){
 }
 
 divider(){
-  if [ -z "$1" ]; then x=1; else x=$1; fi
+  if [[ -z "$1" ]]; then x=1; else x=$1; fi
   for i in {1..$x}; do
     echo
   done
@@ -104,11 +104,15 @@ divider(){
 
 YesNo(){
   unset yesNo
-  cread purple 'Continue? [y/N]: ' yesNo
-  if [ -z "$yesNo" ] || [ "$yesNo" == "y" ]; then
-    continue
-  elif [ "$yesNo" == "N" ]; then
-    echo "See you!"
+  cstr purple 'Continue? [y/N]: '
+  read yesNo
+  if [[ -z "$yesNo" ]] || [[ "$yesNo" == "y" ]] || [[ "$yesNo" == "Y" ]]; then
     return 0
+  elif [[ "$yesNo" == "N" ]] || [[ "$yesNo" == "n" ]]; then
+    echo "See you!"
+    exit 0
+  else
+    echo "You typed \"$yesNo\", wrong command."
+    exit 1
   fi
 }
