@@ -39,10 +39,8 @@ user_in_docker_group=$(id -nG "$USER" | grep docker)
 if [ -z "$docker_group" ] && [ -z "$user_in_docker_group" ]; then
   sudo groupadd docker
   sudo usermod -aG docker $USER
-  newgrp docker
 elif [ -z "$user_in_docker_group" ]; then
   sudo usermod -aG docker $USER
-  newgrp docker
 fi
 
 
