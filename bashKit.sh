@@ -148,3 +148,32 @@ If_Install_Missing_Program(){
     eval $2
   fi
 }
+
+Copy_SSH_Key_To_Client(){
+  if [[ $(declare -f cecho > /dev/null; echo $?) -gt 0 ]]; then source <(curl -s https://raw.githubusercontent.com/killDevils/PublicSource/master/bashKit.sh); fi
+  Miss_Parameter_Warning "Copy_SSH_Key_To_Client root 192.168.0.1 /etc/dropbear" $3
+  If_Install_Missing_Program expect "sudo apt update && sudo apt install expect -y"
+  if [[ ! -f "$HOME/.ssh/id_rsa.pub" ]]; then
+    YesNo "It seems that no \"id_rsa.pub\" under \"~/.ssh/\". Going to create a new one..."
+    generate_ssh=$(expect -c "
+set timeout 2
+
+spawn ssh-keygen
+
+expect \"Enter file in which to save the key*\"
+send \"\r\"
+
+expect \"Enter passphrase*\"
+send \"\r\"
+
+expect \"Enter same passphrase again:\"
+send \"\r\"
+
+expect eof
+")
+echo "$generate_ssh"
+  fi
+
+
+  ssh $3@$1 "tee -a $2/authorized_keys" < ~/.ssh/id_rsa.pub
+}
