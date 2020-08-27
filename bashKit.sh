@@ -103,6 +103,8 @@ divider(){
 }
 
 YesNo(){
+  Miss_Parameter_Warning "YesNo \"Some words about warning...\"" $1
+  cecho yellow "WARNING: $(cstr cyan "$1")"
   unset yesNo
   cstr purple 'Continue? [y/N]: '
   read yesNo
@@ -115,4 +117,28 @@ YesNo(){
     echo "You typed \"$yesNo\", wrong command."
     exit 1
   fi
+}
+
+Miss_Parameter_Warning(){
+  if [[ $(declare -f cecho > /dev/null; echo $?) -gt 0 ]]; then
+    source <(curl -s https://raw.githubusercontent.com/killDevils/PublicSource/master/bashKit.sh)
+  fi
+  if [[ -z $2 ]]; then
+    cstr whiteRed "[WARNING] "
+    cecho yellow "Miss Argument(s)!"
+    cecho cyan "e.g. "
+    exit 1
+  fi
+  # if [[ -z $1 ]] && [[ -z $2 ]]; then
+  #   cecho whiteRed "Miss_Parameter_Warning need Argument(s)! e.g.
+  #   Miss_Parameter_Warning \$3 \"String\""
+  #   exit 1
+  # fi
+}
+
+# reopen test file. e.g. rot test.sh
+rot(){
+  local f=test.sh
+  rm -f $f
+  nano $f
 }
