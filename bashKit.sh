@@ -1,5 +1,5 @@
 # source <(curl -s https://raw.githubusercontent.com/killDevils/PublicSource/master/bashKit.sh)
-
+if [[ $(declare -f cecho > /dev/null; echo $?) -gt 0 ]]; then source <(curl -s https://raw.githubusercontent.com/killDevils/PublicSource/master/bashKit.sh); fi
 
 grey='1;38;5;248';white='1;97';red='1;31';green='1;32';yellow='1;33';blue='1;34';purple='1;35';cyan='1;36';greyBlink='1;38;5;248;5';whiteBlink='1;97;5';redBlink='1;31;5';greenBlink='1;32;5';yellowBlink='1;33;5';blueBlink='1;34;5';purpleBlink='1;35;5';cyanBlink='1;36;5';whiteGrey='1;37;100';whiteRed='1;37;41';whiteGreen='1;37;42';whiteYellow='1;37;43';whiteBlue='1;37;44';whitePurple='1;37;45';whiteCyan='1;37;46';whiteGreyBlink='1;37;100;5';whiteRedBlink='1;37;41;5';whiteGreenBlink='1;37;42;5';whiteYellowBlink='1;37;43;5';whiteBlueBlink='1;37;44;5';whitePurpleBlink='1;37;45;5';whiteCyanBlink='1;37;46;5';
 
@@ -119,26 +119,31 @@ YesNo(){
   fi
 }
 
+# use inside a function.
+# test if parent function misses the last parameter
+# e.g. Miss_Parameter_Warning "parent funcion's e.g." $3
 Miss_Parameter_Warning(){
-  if [[ $(declare -f cecho > /dev/null; echo $?) -gt 0 ]]; then
-    source <(curl -s https://raw.githubusercontent.com/killDevils/PublicSource/master/bashKit.sh)
-  fi
+
   if [[ -z $2 ]]; then
     cstr whiteRed "[WARNING] "
     cecho yellow "Miss Argument(s)!"
     cecho cyan "e.g. "
     exit 1
   fi
-  # if [[ -z $1 ]] && [[ -z $2 ]]; then
-  #   cecho whiteRed "Miss_Parameter_Warning need Argument(s)! e.g.
-  #   Miss_Parameter_Warning \$3 \"String\""
-  #   exit 1
-  # fi
 }
 
-# reopen test file. e.g. rot test.sh
+# reopen test.sh file
+# remove test.sh, nano a new test.sh
 rot(){
   local f=test.sh
   rm -f $f
   nano $f
+}
+
+If_Install_Missing_Program(){
+  Miss_Parameter_Warning "If_Install_Missing_Program expect \"sudo apt update && sudo apt install expect -y\"" $1 $2
+  if [[ -z $(which expect) ]]; then
+    YesNo "Program \"$1\" is not found, going to install an appropriate version..."
+    eval $2
+  fi
 }
