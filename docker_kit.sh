@@ -33,7 +33,7 @@ rmc(){
 
 lsc(){
   if [[ -z $1 ]]; then
-    docker ps -a;;
+    docker ps -a
     return 0
   fi
   case $1 in
