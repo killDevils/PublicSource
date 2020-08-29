@@ -33,14 +33,11 @@ rmc(){
 
 lsc(){
   if [[ -z $1 ]]; then
-    echo "缺参数。
-    罗列所有：“lsc all”。
-    罗列运行中的：“lsc running”。
-    罗列停止了的：“lsc stopped”。"
+    docker ps -a;;
     return 0
   fi
   case $1 in
-    all ) docker ps -a;;
+    # all ) docker ps -a;;
     running ) docker ps --filter status=running;;
     stopped ) docker ps --filter status=exited;;
   esac
