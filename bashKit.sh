@@ -13,18 +13,37 @@ cecho(){
   fi
 }
 
-# cecho(){
-#   eval local x=\${$1}
-#   echo -e "\e[${x}m $2 \e[0m"
-# }
-
 cstr(){
   eval local x=\${$1}
   echo -ne "\e[${x}m$2\e[0m"
 }
 
 cread(){
-  read -p "$(cecho $1 "$2")" $3
+    read -p "$(cecho $1 "$2")" $3
+}
+
+divider(){
+  if [[ -z "$1" ]]; then x=1; else x=$1; fi
+  for i in {1..$x}; do
+    echo
+  done
+}
+
+YesNo(){
+  Miss_Parameter_Warning "YesNo \"Some words about warning...\"" $1
+  cecho yellow "WARNING: $(cstr cyan "$1")"
+  unset yesNo
+  cstr purple 'Continue? [y/N]: '
+  read yesNo
+  if [[ -z "$yesNo" ]] || [[ "$yesNo" == "y" ]] || [[ "$yesNo" == "Y" ]]; then
+    return 0
+  elif [[ "$yesNo" == "N" ]] || [[ "$yesNo" == "n" ]]; then
+    echo "See you!"
+    exit 0
+  else
+    echo "You typed \"$yesNo\", wrong command."
+    exit 1
+  fi
 }
 
 addCron(){
@@ -96,29 +115,7 @@ FourOperations(){
   printf %.$2f $(echo "$1" | bc -l)
 }
 
-divider(){
-  if [[ -z "$1" ]]; then x=1; else x=$1; fi
-  for i in {1..$x}; do
-    echo
-  done
-}
 
-YesNo(){
-  Miss_Parameter_Warning "YesNo \"Some words about warning...\"" $1
-  cecho yellow "WARNING: $(cstr cyan "$1")"
-  unset yesNo
-  cstr purple 'Continue? [y/N]: '
-  read yesNo
-  if [[ -z "$yesNo" ]] || [[ "$yesNo" == "y" ]] || [[ "$yesNo" == "Y" ]]; then
-    return 0
-  elif [[ "$yesNo" == "N" ]] || [[ "$yesNo" == "n" ]]; then
-    echo "See you!"
-    exit 0
-  else
-    echo "You typed \"$yesNo\", wrong command."
-    exit 1
-  fi
-}
 
 # use inside a function.
 # test if parent function misses the last parameter
@@ -138,6 +135,7 @@ Miss_Parameter_Warning(){
 rot(){
   local f=test.sh
   rm -f $f
+  touch $f; sudo chmod +x $f
   nano $f
 }
 
@@ -177,3 +175,16 @@ echo "$generate_ssh"
 
   ssh $3@$1 "tee -a $2/authorized_keys" < ~/.ssh/id_rsa.pub
 }
+
+
+# usage $# "function example"
+usage(){
+	if [[ $1 -lt 1 ]]; then
+    cstr whiteRed "[WARNING]"
+    cecho yellow " Miss Argument(s)!"
+    cecho cyan "e.g. $2";
+		return 1
+	fi
+}
+# under this func, add a line to exit parent func:
+# [ "$?" -gt 0 ] && return 1

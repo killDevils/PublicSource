@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 source <(curl -s https://raw.githubusercontent.com/killDevils/PublicSource/master/bashKit.sh)
 
