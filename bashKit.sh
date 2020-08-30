@@ -118,18 +118,6 @@ FourOperations(){
 
 
 
-# use inside a function.
-# test if parent function misses the last parameter
-# e.g. Miss_Parameter_Warning "parent funcion's e.g." $3
-Miss_Parameter_Warning(){
-
-  if [[ -z $2 ]]; then
-    cstr whiteRed "[WARNING] "
-    cecho yellow "Miss Argument(s)!"
-    cecho cyan "e.g. "
-    exit 1
-  fi
-}
 
 # reopen test.sh file
 # remove test.sh, nano a new test.sh
@@ -140,42 +128,16 @@ rot(){
   nano $f
 }
 
-If_Install_Missing_Program(){
-  Miss_Parameter_Warning "If_Install_Missing_Program expect \"sudo apt update && sudo apt install expect -y\"" $1 $2
+Check_Program(){
+  usage $# "Check_Program(install a program if not exists) <program name>(required) <install commands>(required)"
+  [ "$?" -gt 0 ] && return 1
+
   if [[ -z $(which expect) ]]; then
     YesNo "Program \"$1\" is not found, going to install an appropriate version..."
     eval $2
   fi
 }
 
-Copy_SSH_Key_To_Client(){
-  if [[ $(declare -f cecho > /dev/null; echo $?) -gt 0 ]]; then source <(curl -s https://raw.githubusercontent.com/killDevils/PublicSource/master/bashKit.sh); fi
-  Miss_Parameter_Warning "Copy_SSH_Key_To_Client root 192.168.0.1 /etc/dropbear" $3
-  If_Install_Missing_Program expect "sudo apt update && sudo apt install expect -y"
-  if [[ ! -f "$HOME/.ssh/id_rsa.pub" ]]; then
-    YesNo "It seems that no \"id_rsa.pub\" under \"~/.ssh/\". Going to create a new one..."
-    generate_ssh=$(expect -c "
-set timeout 2
-
-spawn ssh-keygen
-
-expect \"Enter file in which to save the key*\"
-send \"\r\"
-
-expect \"Enter passphrase*\"
-send \"\r\"
-
-expect \"Enter same passphrase again:\"
-send \"\r\"
-
-expect eof
-")
-echo "$generate_ssh"
-  fi
-
-
-  ssh $3@$1 "tee -a $2/authorized_keys" < ~/.ssh/id_rsa.pub
-}
 
 
 # usage $# "function example"
