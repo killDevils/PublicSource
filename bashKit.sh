@@ -30,7 +30,8 @@ divider(){
 }
 
 YesNo(){
-  Miss_Parameter_Warning "YesNo \"Some words about warning...\"" $1
+  usage $# "YesNo \"Some words about warning...\""
+  [ "$?" -gt 0 ] && return 1
   cecho yellow "WARNING: $(cstr cyan "$1")"
   unset yesNo
   cstr purple 'Continue? [y/N]: '
@@ -179,12 +180,44 @@ echo "$generate_ssh"
 
 # usage $# "function example"
 usage(){
-	if [[ $1 -lt 1 ]]; then
+	if [[ $1 -eq 0 ]]; then
     cstr whiteRed "[WARNING]"
     cecho yellow " Miss Argument(s)!"
-    cecho cyan "e.g. $2";
+    cecho cyan "e.g. $2"
 		return 1
 	fi
 }
 # under this func, add a line to exit parent func:
 # [ "$?" -gt 0 ] && return 1
+
+cfile(){
+  usage $# "CFile(create file) <filepath>(required) <octal privilege number>(optional)"
+  [ "$?" -gt 0 ] && return 1
+  if [[ ! -f "$1" ]]; then
+    touch $1
+  fi
+  if [[ -n "$2" ]]; then
+    sudo chmod $2 $1
+  fi
+}
+
+cdir(){
+  usage $# "cdir(create directory) <directory>(required) <octal privilege number>(optional)"
+  [ "$?" -gt 0 ] && return 1
+
+  if [[ ! -d "$1" ]]; then
+    mkdir -p $1
+  fi
+  if [[ -n "$2" ]]; then
+    sudo chmod -R $2 $1
+  fi
+}
+
+# Check(){
+#   usage $# "Check <return or exit>(required) <comment for echo>(optional)"
+#   [ "$?" -gt 0 ] && return 1
+#   if [[ -n "$2" ]]; then
+#     echo "$2"
+#   fi
+#   eval $1 1
+# }
