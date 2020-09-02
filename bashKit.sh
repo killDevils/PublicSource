@@ -129,7 +129,7 @@ rot(){
 }
 
 Check_Program(){
-  usage $# "Check_Program(install a program if not exists) <program name>(required) <install commands>(required)"
+  usage $# 2 "Check_Program(install a program if not exists) <program name>(required) <install commands>(required)"
   [ "$?" -gt 0 ] && return 1
 
   if [[ -z $(which expect) ]]; then
