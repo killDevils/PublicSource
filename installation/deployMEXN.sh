@@ -19,3 +19,9 @@ apt-get install -y nodejs
 # apt-get update
 #
 # apt-get install -y mongodb-org
+npm install -g @vue/cli
+
+vue create PROJECTNAME
+
+# cd to the PROJECTNAME folder
+npm init

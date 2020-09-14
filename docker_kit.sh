@@ -5,7 +5,7 @@ rmc(){
   if [[ -z $1 ]]; then
     echo "Parameter missing.
     to remove all containers: rmc all
-    to delete a certain one: rmc '$container_name'
+    to delete a certain one: rmc <CONTAINER_NAME>
     to delete all stopped: rmc stopped"
     return 0
   fi
@@ -26,7 +26,12 @@ rmc(){
   elif [[ $1 == "stopped" ]]; then
     docker rm $(docker ps -a -q) 2> /dev/null
   else
+    echo "Shutting down $1..."
+    docker stop $1
+    echo "$1 stopped."
+    echo "Removing: $1"
     docker rm $1
+    echo "$1 removed."
   fi
 }
 
@@ -45,9 +50,9 @@ lsc(){
 
 rmi(){
   if [[ -z "$1" ]]; then
-    echo "缺参数。
-    删除所有：“rmi all”。
-    删除某一个：“rmi 镜像名”。"
+    echo "Parameter missing.
+    to delete all images: rmi all
+    to delete a certain one: rmi <IMAGE_NAME>"
     return 0
   fi
   if [[ "$1" == "all" ]]; then
@@ -60,4 +65,15 @@ rmi(){
 
 lsi(){
   docker image ls
+}
+
+ssd(){
+  if [[ -z $1 ]]; then
+    echo "Parameter missing.
+    ssd <CONTAINER_NAME>
+    to delete a certain one: rmc <CONTAINER_NAME>
+    to delete all stopped: rmc stopped"
+    return 0
+  fi
+  docker exec -it $1 bash
 }
